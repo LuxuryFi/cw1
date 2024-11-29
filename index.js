@@ -55,11 +55,11 @@ const cartSchema = new mongoose.Schema({
 
 
 const orderSchema = new mongoose.Schema({
-  gmail: String,
   dayOfWeek: String,
   time: String,
   capacity: Number,
   duration: Number,
+  courseId: String,
   price: Number,
   class_type: String,
   description: String,
@@ -168,15 +168,17 @@ app.post('/order', async (req, res) => {
 
     // Loop through each cart item and insert it with the additional info (gmail)
     const updatedCarts = allCarts.map(cartItem => ({
-      ...cartItem.toObject(),  // Convert Mongoose document to a plain object
-      email: gmail,            // Add the email info
+      ...cartItem.toObject(),
+        // Convert Mongoose document to a plain object
+      email: gmail,
+      courseId: cartItem._id,          // Add the email info
     }));
 
     // Insert updated cart items back into the database or perform the desired operation
-    await CartModel.insertMany(updatedCarts);  // This will insert multiple new records
+    await OrderModel.insertMany(updatedCarts);  // This will insert multiple new records
 
     // Delete all cart items after the order is placed
-    await CartModel.deleteMany({});
+    await OrderModel.deleteMany({});
 
     res.status(200).json({ message: 'Cart updated and all cart items deleted successfully' });
   } catch (err) {
