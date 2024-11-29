@@ -90,7 +90,7 @@ app.delete('/:id', async (req, res) => {
     const _id = req.params.id;
     console.log('_id', _id);
 
-    const abc = await ClassModel.deleteOne({ _id: _id });
+    const abc = await CartModel.deleteOne({ _id: _id });
     console.log('abc')
     res.status(200).json(abc)
   } catch (err) {
@@ -126,11 +126,6 @@ app.post('/cart', async (req, res) => {
     console.error('Error uploading data:', error);
     res.status(500).json({ message: 'Failed to upload class data' });
   }
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
 });
 
 app.get('/cart', async (req, res) => {
@@ -182,18 +177,6 @@ app.post('/order', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-app.get('/cart', async (req, res) => {
-  try {
-    const { gmail, courseId } = req.body;
-    console.log('_id', _id);
-    res.status(200).json(newClass)
-  } catch (err) {
-    console.log('err', err);
-  }
-})
-
-
 
 app.put('/:id', async (req, res) => {
   try {
