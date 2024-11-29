@@ -71,11 +71,7 @@ app.post('/upload', async (req, res) => {
       image,  // Directly store the image URL
     });
 
-    // Save the document
-    const abc = await ClassModel.find();
-    console.log('abc', abc)
-
-    // await newClass.save();
+    await newClass.save();
     res.status(200).json({ message: 'Class data uploaded successfully!' });
   } catch (error) {
     console.error('Error uploading data:', error);
