@@ -228,7 +228,7 @@ app.put('/:id', async (req, res) => {
     const result = await ClassModel.updateOne(
       { _id }, // The filter to find the document
       {
-        $set: { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } // The data to update
+        $set: { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image, position } // The data to update
       }
     );
 
@@ -247,7 +247,7 @@ app.put('/:id', async (req, res) => {
 
 app.post('/upload', async (req, res) => {
   try {
-    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
+    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher,position, image } = req.body.nameValuePairs;
 
     console.log(req.body);
     if (!image) {
