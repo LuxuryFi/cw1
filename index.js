@@ -185,11 +185,14 @@ app.post('/order', async (req, res) => {
 
     // Process each cart item one by one
     for (const cartItem of allCarts) {
+      // Convert the cart item to a plain object to ensure all fields are included
+      const cartData = cartItem.toObject();
+
       // Create a new order document with the cart item details
       const newOrder = new OrderModel({
         gmail,
-        courseId: cartItem._id,
-        ...cartItem, // Use the cart item ID as the courseId
+        courseId: cartData._id,
+        ...cartData, // Spread all cart item fields into the order document
       });
 
       // Save the order
