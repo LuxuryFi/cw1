@@ -70,7 +70,7 @@ app.delete('/:id', async (req, res) => {
     const _id = req.params.id;
     console.log('_id', _id);
 
-    const abc = await ClassModel.deleteOne(_id);
+    const abc = await ClassModel.deleteOne({ _id: _id });
     console.log('abc')
     res.status(200).json(abc)
   } catch (err) {
