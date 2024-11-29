@@ -82,7 +82,7 @@ app.put('/:id', async (req, res) => {
   try {
     const _id = req.params.id; // Extract the id from the URL
     // Extract the data from the request body directly
-    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body;
+    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
 
     // Log the received data to verify
     console.log('_id', _id);
