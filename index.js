@@ -89,7 +89,7 @@ app.put('/:id', async (req, res) => {
     });
     res.status(200).json(abc)
   } catch (err) {
-
+    console.log('err', err);
   }
 })
 
