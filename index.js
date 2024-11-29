@@ -100,12 +100,9 @@ app.delete('/:id', async (req, res) => {
 
 app.post('/cart', async (req, res) => {
   try {
-    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
+    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body;
 
     console.log(req.body);
-    if (!image) {
-      return res.status(400).json({ message: 'Image URL is required' });
-    }
 
     // Create a new document in MongoDB
     const newClass = new CartModel({
