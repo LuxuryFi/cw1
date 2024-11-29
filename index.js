@@ -188,7 +188,8 @@ app.post('/order', async (req, res) => {
       // Create a new order document with the cart item details
       const newOrder = new OrderModel({
         gmail,
-        courseId: cartItem._id, // Use the cart item ID as the courseId
+        courseId: cartItem._id,
+        ...cartItem, // Use the cart item ID as the courseId
       });
 
       // Save the order
