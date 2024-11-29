@@ -53,6 +53,7 @@ app.post('/upload', async (req, res) => {
   try {
     const { day_of_week, time, capacity, duration, price, class_type, description, teacher, image } = req.body;
 
+    console.log(req.body);
     if (!image) {
       return res.status(400).json({ message: 'Image URL is required' });
     }
