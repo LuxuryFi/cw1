@@ -49,6 +49,16 @@ mongoose.connect(dbURI, {
 const ClassModel = mongoose.model('Class', schema);
 
 // POST route for uploading data (including image URL)
+app.get('/', async (req, res) => {
+  try {
+    const abc = await ClassModel.find();
+
+    res.status(200).json(abc)
+  } catch (err) {
+
+  }
+})
+
 app.post('/upload', async (req, res) => {
   try {
     const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
