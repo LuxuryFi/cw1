@@ -25,7 +25,7 @@ mongoose.connect(dbURI, {
 
 // Define the schema for the data to be inserted into MongoDB
 const schema = new mongoose.Schema({
-  day_of_week: String,
+  dayOfWeek: String,
   time: String,
   capacity: Number,
   duration: Number,
@@ -51,7 +51,7 @@ const ClassModel = mongoose.model('Class', schema);
 // POST route for uploading data (including image URL)
 app.post('/upload', async (req, res) => {
   try {
-    const { day_of_week, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
+    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
 
     console.log(req.body);
     if (!image) {
@@ -60,7 +60,7 @@ app.post('/upload', async (req, res) => {
 
     // Create a new document in MongoDB
     const newClass = new ClassModel({
-      day_of_week,
+      dayOfWeek,
       time,
       capacity,
       duration,
