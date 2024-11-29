@@ -68,7 +68,7 @@ const orderSchema = new mongoose.Schema({
   description: String,
   teacher: String,
   image: String,  // Stor
-  gmail: String,
+  email: String,
 });
 
 mongoose.connect(dbURI, {
@@ -180,6 +180,7 @@ app.post('/order', async (req, res) => {
   try {
     const { email } = req.body; // Assuming 'gmail' is passed in the request body.
 
+    console.log('email', email);
     // Fetch all cart entries
     const allCarts = await CartModel.find();
 
