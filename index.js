@@ -144,10 +144,9 @@ app.get('/cart', async (req, res) => {
   }
 })
 
-app.get('/order/:gmail', async (req, res) => {
+app.get('/order', async (req, res) => {
   try {
-    const gmail = req.params.gmail;
-    const newClass = await OrderModel.find({ gmail: gmail});
+    const newClass = await OrderModel.find();
 
     res.status(200).json(newClass)
   } catch (err) {
