@@ -127,8 +127,6 @@ app.post('/cart', async (req, res) => {
 
 app.get('/cart', async (req, res) => {
   try {
-    const { gmail, courseId } = req.body;
-    console.log('_id', _id);
     const newClass = await CartModel.find();
     res.status(200).json(newClass)
   } catch (err) {
