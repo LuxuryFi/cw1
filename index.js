@@ -144,7 +144,7 @@ app.get('/cart', async (req, res) => {
   }
 })
 
-app.get('/order', async (req, res) => {
+app.get('/orders', async (req, res) => {
   try {
     const newClass = await OrderModel.find();
 
