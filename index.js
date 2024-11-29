@@ -66,15 +66,15 @@ app.get('/', async (req, res) => {
 
 app.delete('/:id', async (req, res) => {
   try {
+
     const _id = req.params.id;
     console.log('_id', _id);
-    console.log('_id', req.param);
 
     const abc = await ClassModel.deleteOne(_id);
     console.log('abc')
     res.status(200).json(abc)
   } catch (err) {
-
+    console.log('err', err);
   }
 })
 
