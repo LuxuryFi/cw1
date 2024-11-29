@@ -181,19 +181,26 @@ app.post('/order', async (req, res) => {
 
     // Loop through each cart item and insert it with the additional info (gmail)
     const updatedCarts = allCarts.map(cartItem => ({
-      ...cartItem.toObject(),
-        // Convert Mongoose document to a plain object
-      email: gmail,
-      courseId: cartItem._id,          // Add the email info
+      ...cartItem.toObject(),  // Convert Mongoose document to a plain object
+      email: gmail,            // Add the email info
     }));
 
-    // Insert updated cart items back into the database or perform the desired operation
-    await OrderModel.insertMany(updatedCarts);  // This will insert multiple new records
+    // Perform bulk write (update existing cart items)
+    const bulkOps = updatedCarts.map(cartItem => ({
+      updateOne: {
+        filter: { _id: cartItem._id },  // Use the existing _id to update the document
+        update: { $set: cartItem },      // Set the new data
+        upsert: false                    // Don't insert, only update
+      }
+    }));
+
+    // Execute the bulk write operation
+    const result = await CartModel.bulkWrite(bulkOps);
 
     // Delete all cart items after the order is placed
-    await OrderModel.deleteMany({});
+    await CartModel.deleteMany({});
 
-    res.status(200).json({ message: 'Cart updated and all cart items deleted successfully' });
+    res.status(200).json({ message: 'Cart updated and all cart items deleted successfully', result });
   } catch (err) {
     console.log('Error:', err);
     res.status(500).json({ error: 'Internal Server Error' });
