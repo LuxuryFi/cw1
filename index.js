@@ -80,18 +80,34 @@ app.delete('/:id', async (req, res) => {
 
 app.put('/:id', async (req, res) => {
   try {
-    const _id = req.params.id;
-    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
-    console.log('_id', req.body);
+    const _id = req.params.id; // Extract the id from the URL
+    // Extract the data from the request body directly
+    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body;
+
+    // Log the received data to verify
     console.log('_id', _id);
-    const abc = await ClassModel.updateOne(_id, {
-      dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image
-    });
-    res.status(200).json(abc)
+    console.log('Updated data', { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image });
+
+    // Use _id in the filter to find the document to update
+    const result = await ClassModel.updateOne(
+      { _id }, // The filter to find the document
+      {
+        $set: { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } // The data to update
+      }
+    );
+
+    // Check if the update was successful
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: 'No document found with the given ID or no changes were made.' });
+    }
+
+    res.status(200).json({ message: 'Class details updated successfully', result });
   } catch (err) {
-    console.log('err', err);
+    console.error('Error updating class details:', err);
+    res.status(500).json({ message: 'An error occurred while updating class details.' });
   }
-})
+});
+
 
 app.post('/upload', async (req, res) => {
   try {
