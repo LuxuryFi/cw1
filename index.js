@@ -1,11 +1,14 @@
 // server.js
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // Initialize express app
 const app = express();
 const port = 3000;
-
+app.use(cors({
+  origin: '*', // Allows requests from any origin. Replace '*' with your specific origin (e.g., 'http://localhost:61875') for more security.
+}));
 // Middleware to handle JSON requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
