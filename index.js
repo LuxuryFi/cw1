@@ -37,6 +37,7 @@ const schema = new mongoose.Schema({
   price: Number,
   class_type: String,
   description: String,
+  position: String,
   teacher: String,
   image: String,  // Store the image URL
 });
@@ -47,6 +48,7 @@ const cartSchema = new mongoose.Schema({
   capacity: Number,
   duration: Number,
   price: Number,
+  position: String,
   class_type: String,
   description: String,
   teacher: String,
@@ -62,6 +64,7 @@ const orderSchema = new mongoose.Schema({
   courseId: String,
   price: Number,
   class_type: String,
+  position: String,
   description: String,
   teacher: String,
   image: String,  // Stor
@@ -110,7 +113,7 @@ app.delete('/:id', async (req, res) => {
 
 app.post('/cart', async (req, res) => {
   try {
-    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body;
+    const { dayOfWeek, time, capacity, duration, price, class_type, description, position, teacher, image } = req.body;
 
     console.log(req.body);
 
@@ -120,6 +123,7 @@ app.post('/cart', async (req, res) => {
       time,
       capacity,
       duration,
+      position,
       price,
       class_type,
       description,
@@ -214,7 +218,7 @@ app.put('/:id', async (req, res) => {
   try {
     const _id = req.params.id; // Extract the id from the URL
     // Extract the data from the request body directly
-    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
+    const { dayOfWeek, time, capacity, duration, price, class_type, position, description, teacher, image } = req.body.nameValuePairs;
 
     // Log the received data to verify
     console.log('_id', _id);
@@ -260,6 +264,7 @@ app.post('/upload', async (req, res) => {
       class_type,
       description,
       teacher,
+      position,
       image,  // Directly store the image URL
     });
 
