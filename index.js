@@ -51,7 +51,7 @@ const ClassModel = mongoose.model('Class', schema);
 // POST route for uploading data (including image URL)
 app.post('/upload', async (req, res) => {
   try {
-    const { day_of_week, time, capacity, duration, price, class_type, description, teacher, image } = req.body;
+    const { day_of_week, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
 
     console.log(req.body);
     if (!image) {
