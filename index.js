@@ -53,9 +53,19 @@ const cartSchema = new mongoose.Schema({
   image: String,  // Store
 });
 
+
 const orderSchema = new mongoose.Schema({
   gmail: String,
-  courseId: String// Store the image URL
+  dayOfWeek: String,
+  time: String,
+  capacity: Number,
+  duration: Number,
+  price: Number,
+  class_type: String,
+  description: String,
+  teacher: String,
+  image: String,  // Stor
+  gmail: String,
 });
 
 mongoose.connect(dbURI, {
@@ -160,18 +170,21 @@ app.post('/order', async (req, res) => {
     const updatedCarts = allCarts.map(cartItem => ({
       ...cartItem.toObject(),  // Convert Mongoose document to a plain object
       email: gmail,            // Add the email info
-      courseId: courseId       // Optionally, add the courseId if you want to associate this with each item
     }));
 
     // Insert updated cart items back into the database or perform the desired operation
     await CartModel.insertMany(updatedCarts);  // This will insert multiple new records
 
-    res.status(200).json({ message: 'Cart updated successfully' });
+    // Delete all cart items after the order is placed
+    await CartModel.deleteMany({});
+
+    res.status(200).json({ message: 'Cart updated and all cart items deleted successfully' });
   } catch (err) {
     console.log('Error:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 app.put('/:id', async (req, res) => {
   try {
