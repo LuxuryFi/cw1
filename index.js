@@ -41,6 +41,23 @@ const schema = new mongoose.Schema({
   image: String,  // Store the image URL
 });
 
+const cartSchema = new mongoose.Schema({
+  dayOfWeek: String,
+  time: String,
+  capacity: Number,
+  duration: Number,
+  price: Number,
+  class_type: String,
+  description: String,
+  teacher: String,
+  image: String,  // Store
+});
+
+const orderSchema = new mongoose.Schema({
+  gmail: String,
+  courseId: String// Store the image URL
+});
+
 mongoose.connect(dbURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -52,6 +69,9 @@ mongoose.connect(dbURI, {
 
 // Create a model for the schema
 const ClassModel = mongoose.model('Class', schema);
+const CartModel = mongoose.model('Cart', cartSchema);
+const OrderModel = mongoose.model('Order', orderSchema);
+
 
 // POST route for uploading data (including image URL)
 app.get('/', async (req, res) => {
@@ -77,6 +97,103 @@ app.delete('/:id', async (req, res) => {
     console.log('err', err);
   }
 })
+
+app.post('/cart', async (req, res) => {
+  try {
+    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
+
+    console.log(req.body);
+    if (!image) {
+      return res.status(400).json({ message: 'Image URL is required' });
+    }
+
+    // Create a new document in MongoDB
+    const newClass = new CartModel({
+      dayOfWeek,
+      time,
+      capacity,
+      duration,
+      price,
+      class_type,
+      description,
+      teacher,
+      image,  // Directly store the image URL
+    });
+
+    await newClass.save();
+    res.status(200).json({ message: 'Class data uploaded successfully!' });
+  } catch (error) {
+    console.error('Error uploading data:', error);
+    res.status(500).json({ message: 'Failed to upload class data' });
+  }
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+app.get('/cart', async (req, res) => {
+  try {
+    const { gmail, courseId } = req.body;
+    console.log('_id', _id);
+    const newClass = await CartModel.find();
+    res.status(200).json(newClass)
+  } catch (err) {
+    console.log('err', err);
+  }
+})
+
+app.delete('/:id', async (req, res) => {
+  try {
+
+    const _id = req.params.id;
+    console.log('_id', _id);
+
+    const abc = await CartModel.deleteOne({ _id: _id });
+    console.log('abc')
+    res.status(200).json(abc)
+  } catch (err) {
+    console.log('err', err);
+  }
+})
+
+
+app.post('/order', async (req, res) => {
+  try {
+    const { gmail } = req.body;  // Assuming you are passing 'gmail' and 'courseId' in the request body.
+
+    // Fetch all cart entries
+    const allCarts = await CartModel.find();
+
+    // Loop through each cart item and insert it with the additional info (gmail)
+    const updatedCarts = allCarts.map(cartItem => ({
+      ...cartItem.toObject(),  // Convert Mongoose document to a plain object
+      email: gmail,            // Add the email info
+      courseId: courseId       // Optionally, add the courseId if you want to associate this with each item
+    }));
+
+    // Insert updated cart items back into the database or perform the desired operation
+    await CartModel.insertMany(updatedCarts);  // This will insert multiple new records
+
+    res.status(200).json({ message: 'Cart updated successfully' });
+  } catch (err) {
+    console.log('Error:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/cart', async (req, res) => {
+  try {
+    const { gmail, courseId } = req.body;
+    console.log('_id', _id);
+    res.status(200).json(newClass)
+  } catch (err) {
+    console.log('err', err);
+  }
+})
+
+
 
 app.put('/:id', async (req, res) => {
   try {
