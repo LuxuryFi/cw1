@@ -55,7 +55,7 @@ const ClassModel = mongoose.model('Class', schema);
 app.get('/', async (req, res) => {
   try {
     const abc = await ClassModel.find();
-
+    console.log('abc')
     res.status(200).json(abc)
   } catch (err) {
 
