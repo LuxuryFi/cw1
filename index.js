@@ -67,6 +67,9 @@ app.get('/', async (req, res) => {
 app.delete('/:id', async (req, res) => {
   try {
     const _id = req.params.id;
+    console.log('_id', _id);
+    console.log('_id', req.param);
+
     const abc = await ClassModel.deleteOne(_id);
     console.log('abc')
     res.status(200).json(abc)
@@ -79,7 +82,8 @@ app.put('/:id', async (req, res) => {
   try {
     const _id = req.params.id;
     const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
-
+    console.log('_id', req.body);
+    console.log('_id', _id);
     const abc = await ClassModel.updateOne(_id, {
       dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image
     });
