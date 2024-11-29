@@ -64,6 +64,31 @@ app.get('/', async (req, res) => {
   }
 })
 
+app.delete('/:id', async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const abc = await ClassModel.deleteOne(_id);
+    console.log('abc')
+    res.status(200).json(abc)
+  } catch (err) {
+
+  }
+})
+
+app.put('/:id', async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
+
+    const abc = await ClassModel.updateOne(_id, {
+      dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image
+    });
+    res.status(200).json(abc)
+  } catch (err) {
+
+  }
+})
+
 app.post('/upload', async (req, res) => {
   try {
     const { dayOfWeek, time, capacity, duration, price, class_type, description, teacher, image } = req.body.nameValuePairs;
