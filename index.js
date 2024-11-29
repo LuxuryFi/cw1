@@ -8,7 +8,7 @@ const app = express();
 const port = 3000;
 app.use(cors({
   origin: '*', // Allows requests from any origin. Replace '*' with your specific origin (e.g., 'http://localhost:61875') for more security.
-  methods: ['GET', 'POST', 'OPTIONS'], // Allow these HTTP methods.
+  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'], // Allow these HTTP methods.
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers.
 }));
 // Middleware to handle JSON requests
