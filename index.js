@@ -174,36 +174,34 @@ app.delete('/:id', async (req, res) => {
 
 app.post('/order', async (req, res) => {
   try {
-    const { gmail } = req.body;  // Assuming you are passing 'gmail' and 'courseId' in the request body.
+    const { gmail } = req.body; // Assuming 'gmail' is passed in the request body.
 
     // Fetch all cart entries
     const allCarts = await CartModel.find();
 
-    // Loop through each cart item and insert it with the additional info (gmail)
-    const updatedCarts = allCarts.map(cartItem => ({
-      ...cartItem.toObject(),  // Convert Mongoose document to a plain object
-      email: gmail,            // Add the email info
-    }));
+    if (!allCarts.length) {
+      return res.status(404).json({ message: 'Cart is empty' });
+    }
 
-    // Perform bulk write (update existing cart items)
-    const bulkOps = updatedCarts.map(cartItem => ({
-      updateOne: {
-        filter: { _id: cartItem._id },  // Use the existing _id to update the document
-        update: { $set: cartItem },      // Set the new data
-        upsert: false                    // Don't insert, only update
-      }
-    }));
+    // Process each cart item one by one
+    for (const cartItem of allCarts) {
+      // Create a new order document with the cart item details
+      const newOrder = new OrderModel({
+        gmail,
+        courseId: cartItem._id, // Use the cart item ID as the courseId
+      });
 
-    // Execute the bulk write operation
-    const result = await CartModel.bulkWrite(bulkOps);
+      // Save the order
+      await newOrder.save();
 
-    // Delete all cart items after the order is placed
-    await CartModel.deleteMany({});
+      // Delete the cart item after saving the order
+      await CartModel.deleteOne({ _id: cartItem._id });
+    }
 
-    res.status(200).json({ message: 'Cart updated and all cart items deleted successfully', result });
+    res.status(200).json({ message: 'Order placed successfully and cart cleared' });
   } catch (err) {
-    console.log('Error:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error processing order:', err);
+    res.status(500).json({ error: 'Failed to place the order' });
   }
 });
 
