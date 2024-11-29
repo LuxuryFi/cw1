@@ -178,7 +178,7 @@ app.delete('/:id', async (req, res) => {
 
 app.post('/order', async (req, res) => {
   try {
-    const { gmail } = req.body; // Assuming 'gmail' is passed in the request body.
+    const { email } = req.body; // Assuming 'gmail' is passed in the request body.
 
     // Fetch all cart entries
     const allCarts = await CartModel.find();
@@ -194,7 +194,7 @@ app.post('/order', async (req, res) => {
 
       // Create a new order document with the cart item details
       const newOrder = new OrderModel({
-        gmail,
+        email,
         courseId: cartData._id,
         ...cartData, // Spread all cart item fields into the order document
       });
